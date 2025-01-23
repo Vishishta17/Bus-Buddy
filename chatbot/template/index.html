@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot UI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    
+        .chat-container {
+            width: 420px;
+            max-width: 90%;
+            background: #fff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 3px solid #4CAF50;
+        }
+    
+        .header {
+            background: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            border-bottom: 3px solid #388E3C;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    
+        .chat-box {
+            height: 450px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f0f4f7;
+            border-bottom: 3px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+    
+        .chat-box div {
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 70%;
+            word-wrap: break-word;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    
+        .user {
+            background: #e0f7fa;
+            align-self: flex-end;
+            color: #004d40;
+            border-radius: 20px 20px 0 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    
+        .bot {
+            background: #f1f8e9;
+            align-self: flex-start;
+            color: #004d40;
+            border-radius: 20px 20px 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    
+        .input-container {
+            display: flex;
+            border-top: 3px solid #f1f1f1;
+            background-color: #fff;
+            padding: 10px;
+            justify-content: space-between;
+        }
+    
+        .input-container input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 25px;
+            border: 2px solid #ddd;
+            outline: none;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    
+        .input-container button {
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    
+        .input-container button:hover {
+            background-color: #45a049;
+        }
+    
+        .input-container input:focus {
+            border-color: #4CAF50;
+        }
+    
+        /* Optional: Add some responsiveness */
+        @media (max-width: 480px) {
+            .chat-container {
+                width: 100%;
+                border-radius: 15px;
+            }
+    
+            .header {
+                font-size: 18px;
+                padding: 15px;
+            }
+    
+            .input-container input {
+                font-size: 14px;
+            }
+    
+            .input-container button {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+
+
+    <div class="chat-container">
+        <div class="header">Chat with BusBuddy</div>
+        <div class="chat-box" id="chat-box">
+            <div class="bot">Bot: Hello! How can I assist you today?</div>
+        </div>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type your message here...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+<script>
+    function sendMessage() {
+        var userMessage = document.getElementById("user-input").value;
+        if (userMessage === "") return;
+        
+        var chatBox = document.getElementById("chat-box");
+        var userDiv = document.createElement("div");
+        userDiv.className = "user";
+        userDiv.innerHTML = "You: " + userMessage;
+        chatBox.appendChild(userDiv);
+
+        // Scroll to the bottom of the chat box
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Clear the input field
+        document.getElementById("user-input").value = "";
+
+        // Send the user message to the Flask server
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/get", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                var botDiv = document.createElement("div");
+                botDiv.className = "bot";
+                botDiv.innerHTML = "Bot: " + response.response;
+                chatBox.appendChild(botDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        };
+        xhr.send("msg=" + userMessage);
+    }
+</script>
+
+</body>
+</html>
