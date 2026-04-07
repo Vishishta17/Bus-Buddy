@@ -1,6 +1,6 @@
 🚍 BusBuddy – Smart Bus Assistant Chatbot
-📖 Overview
 
+📖 Overview
 BusBuddy is an NLP-powered smart bus assistant chatbot designed to help users with fare prediction, route discovery, and transit-related queries. It integrates machine learning models with a Flask-based web application to deliver accurate, real-time, and user-friendly responses.
 
 🚀 Key Highlights
