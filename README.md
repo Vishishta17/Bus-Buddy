@@ -52,9 +52,6 @@ BusBuddy is an NLP-powered smart bus assistant chatbot designed to help users wi
 
 ---
 
-## 📂 Project Structure
----
-
 ## 📊 Use Cases
 - Smart public transport assistance  
 - Fare estimation systems  
